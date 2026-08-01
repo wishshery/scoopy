@@ -216,100 +216,27 @@
   animation: pulse-ring 2.8s var(--ease-out) infinite;
 }
 
-/* --- Hero QR chip --------------------------------------------------------
-   A small scan target in the top right, so visitors can follow immediately
-   without reaching the Follow section. */
+/* --- Hero QR card --------------------------------------------------------
+   The same `.qr` component the Follow section uses, pinned to the top right so
+   visitors can scan without scrolling. Only placement is overridden here — the
+   size and styling come from components/follow.css, which is what keeps the two
+   instances identical. */
 
-.hero__qr {
+/* Scoped to `.hero` deliberately: components/follow.css is imported after this
+   file and sets `.qr { position: relative }`, which would win on source order at
+   equal specificity and drop the card back into the hero's grid flow. */
+.hero .qr--hero {
   position: absolute;
-  top: calc(var(--header-h) + 1.4rem);
+  top: calc(var(--header-h) + 1.6rem);
   right: max(1.5rem, calc((100% - var(--shell)) / 2));
   z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 1rem 0.6rem 0.6rem;
-  border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--surface) 82%, transparent);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-md);
-  text-decoration: none;
-  color: var(--ink);
-  transition: transform var(--dur-mid) var(--ease-spring), box-shadow var(--dur-mid) var(--ease-out);
+  margin: 0;
 }
 
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .hero__qr {
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
-    backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
-  }
-}
-
-.hero__qr:hover,
-.hero__qr:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* White plate in both themes — scanners need the light quiet zone. */
-.hero__qr-code {
-  position: relative;
-  display: block;
-  flex: none;
-  width: 4.6rem;
-  height: 4.6rem;
-  padding: 0.3rem;
-  border-radius: var(--radius-md);
-  background: #fff;
-  overflow: hidden;
-}
-
-.hero__qr-code img {
-  width: 100%;
-  height: 100%;
-}
-
-.hero__qr-scan {
-  position: absolute;
-  left: 0.3rem;
-  right: 0.3rem;
-  top: 0;
-  height: 30%;
-  background: linear-gradient(to bottom, transparent, rgba(247, 86, 111, 0.28), transparent);
-  animation: qr-scan 3.6s var(--ease-in-out) infinite;
-}
-
-.hero__qr-text {
-  display: grid;
-  gap: 0.1rem;
-  line-height: 1.25;
-}
-
-.hero__qr-text b {
-  font-size: var(--step--1);
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.hero__qr-text span {
-  font-size: var(--step--1);
-  background: linear-gradient(96deg, #f9a03c, #f7566f 55%, #c93bb7);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: #f7566f;
-}
-
-@supports (-webkit-background-clip: text) or (background-clip: text) {
-  .hero__qr-text span {
-    color: transparent;
-  }
-}
-
-/* Too cramped alongside the headline on narrow screens — the Follow section
-   carries the full-size code there. */
-@media (max-width: 900px) {
-  .hero__qr {
+/* There is no room for a 380px card beside the headline below this width; the
+   Follow section carries the code there instead. */
+@media (max-width: 1180px) {
+  .hero .qr--hero {
     display: none;
   }
 }

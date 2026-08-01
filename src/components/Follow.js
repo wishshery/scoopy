@@ -5,10 +5,11 @@
  * rely on the light quiet zone around the code, and inverting it hurts read rates.
  */
 
-import { esc, asset } from '../utils/dom.js';
+import { esc } from '../utils/dom.js';
 import { icons } from '../utils/icons.js';
 import { social } from '../data/site.js';
 import { renderOrb } from './Decor.js';
+import { renderQrCard } from './QrCard.js';
 
 export function renderFollow() {
   const { instagram } = social;
@@ -46,31 +47,7 @@ export function renderFollow() {
           </div>
         </div>
 
-        <figure class="qr" data-parallax="0.06" data-parallax-target data-reveal="zoom">
-          <a
-            href="${esc(instagram.url)}"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Open ${esc(instagram.handle)} on Instagram (opens in a new tab)"
-          >
-            <span class="qr__frame">
-              <img
-                src="${esc(asset(instagram.qr))}"
-                width="720"
-                height="720"
-                alt="QR code linking to Scoopy's Instagram profile, ${esc(instagram.handle)}"
-                loading="lazy"
-                decoding="async"
-              >
-              <span class="qr__scan" aria-hidden="true"></span>
-              <span class="qr__corner qr__corner--tl" aria-hidden="true"></span>
-              <span class="qr__corner qr__corner--tr" aria-hidden="true"></span>
-              <span class="qr__corner qr__corner--bl" aria-hidden="true"></span>
-              <span class="qr__corner qr__corner--br" aria-hidden="true"></span>
-            </span>
-          </a>
-          <figcaption class="qr__label">${esc(instagram.qrLabel)}</figcaption>
-        </figure>
+        ${renderQrCard({ extraAttrs: 'data-parallax="0.06" data-parallax-target data-reveal="zoom"' })}
       </div>
     </section>`;
 }

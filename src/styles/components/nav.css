@@ -17,9 +17,9 @@
   transform: translateY(-140%);
 }
 
-/* The bar always carries its glass plate. It sits over the hero photograph,
-   whose upper right is bright cream — link text on bare photo does not hold
-   contrast there in either theme. Scrolling tightens and lifts it rather than
+/* Dark glass plate in both themes. The nav sits over the hero photograph and
+   later over cream sections; a single dark pill keeps the white link text
+   legible against all of it. Scrolling tightens and lifts the bar rather than
    introducing the background. */
 .nav {
   display: flex;
@@ -28,16 +28,17 @@
   width: var(--shell);
   padding: 0.5rem 0.6rem 0.5rem 1.1rem;
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--surface) 76%, transparent);
-  border: 1px solid var(--glass-border);
+  background: color-mix(in srgb, var(--teal-700) 72%, transparent);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: var(--shadow-sm);
+  color: #fff;
   transition: background var(--dur-mid) var(--ease-out), border-color var(--dur-mid) var(--ease-out),
     box-shadow var(--dur-mid) var(--ease-out), width var(--dur-mid) var(--ease-out);
 }
 
 .site-header.is-stuck .nav {
   width: min(100% - 2.5rem, 1120px);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  background: color-mix(in srgb, var(--teal-700) 88%, transparent);
   box-shadow: var(--shadow-md);
 }
 
@@ -95,7 +96,8 @@
   border-radius: var(--radius-pill);
   font-size: var(--step--1);
   font-weight: 700;
-  color: var(--ink-soft);
+  /* Slightly held back from pure white so the active link still reads as active. */
+  color: rgba(255, 255, 255, 0.82);
   text-decoration: none;
   transition: color var(--dur-fast) var(--ease-out);
 }
@@ -105,7 +107,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  background: rgba(255, 255, 255, 0.16);
   opacity: 0;
   transform: scale(0.8);
   transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-spring);
@@ -113,7 +115,7 @@
 
 .nav__link:hover,
 .nav__link[aria-current='true'] {
-  color: var(--ink);
+  color: #fff;
 }
 
 .nav__link:hover::before,
@@ -134,23 +136,24 @@
 
 /* --- Icon buttons (theme, sound, menu) ---------------------------------- */
 
+/* Only used inside the nav, so these are styled for its dark plate. */
 .icon-btn {
   display: grid;
   place-items: center;
   width: 2.6rem;
   height: 2.6rem;
   border-radius: 50%;
-  color: var(--ink);
-  border: 1px solid var(--hairline);
-  background: color-mix(in srgb, var(--surface) 65%, transparent);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   transition: transform var(--dur-fast) var(--ease-spring), background var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
 }
 
 .icon-btn:hover {
   transform: translateY(-2px);
-  border-color: var(--accent);
-  background: var(--surface);
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.22);
 }
 
 .icon-btn svg {
@@ -205,10 +208,9 @@
     gap: 0.2rem;
     padding: 0.7rem;
     border-radius: var(--radius-lg);
-    /* More opaque than the standard glass panel — this one sits over the hero
-       photograph, where 62% white does not give the link text enough contrast. */
-    background: color-mix(in srgb, var(--surface) 88%, transparent);
-    border: 1px solid var(--glass-border);
+    /* Matches the dark nav plate so the white link text stays legible. */
+    background: color-mix(in srgb, var(--teal-700) 94%, transparent);
+    border: 1px solid rgba(255, 255, 255, 0.16);
     box-shadow: var(--shadow-lg);
     opacity: 0;
     transform: translateY(-12px) scale(0.98);
@@ -238,8 +240,6 @@
   .site-header.is-stuck .nav,
   .nav {
     width: min(100% - 1.5rem, 1120px);
-    background: var(--glass-bg);
-    border-color: var(--glass-border);
     box-shadow: var(--shadow-md);
   }
 }
