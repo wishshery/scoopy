@@ -242,9 +242,12 @@
    brackets and label together. */
 @media (max-width: 1400px) {
   .hero .qr--hero {
+    /* Overriding the shared radius token keeps the gradient rim's corners in
+       step with the card's own. */
+    --qr-radius: var(--radius-lg);
+    --qr-rim: 2px;
     width: clamp(108px, 15vw, 200px);
     padding: 0.5rem;
-    border-radius: var(--radius-lg);
   }
 
   .hero .qr--hero .qr__frame {

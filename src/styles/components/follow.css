@@ -64,14 +64,42 @@
 /* --- QR card ------------------------------------------------------------- */
 
 .qr {
+  /* One radius token for the card and its gradient rim, so overriding the size
+     (as the hero variant does) keeps the two corner radii in step. */
+  --qr-radius: var(--radius-xl);
+  --qr-rim: 4px;
+
   position: relative;
   justify-self: center;
   width: min(100%, 380px);
   padding: var(--space-md);
-  border-radius: var(--radius-xl);
-  background: var(--surface);
-  border: 1px solid var(--hairline);
-  box-shadow: var(--shadow-lg);
+
+  /* Gradient border in the site palette — golden yellow through sunset orange
+     into emerald and deep teal, the same sweep the headings use.
+     Two background layers do the work: the card's own surface clipped to the
+     padding box, and the gradient clipped to the border box, showing through a
+     transparent border. This is deliberately NOT a z-index:-1 pseudo-element —
+     the parallax `transform` below makes this element a stacking context, which
+     would paint such a pseudo-element *over* the card instead of behind it.
+     The deeper ramp stops are also deliberate: this section's background is warm
+     sand, and lighter tints of the same hues vanish against it. */
+  border: var(--qr-rim) solid transparent;
+  border-radius: var(--qr-radius);
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    linear-gradient(
+        140deg,
+        var(--sun-500) 0%,
+        var(--ember-500) 34%,
+        var(--emerald-400) 70%,
+        var(--teal-400) 100%
+      )
+      border-box;
+
+  /* The warm halo is a box-shadow rather than a blurred pseudo-element, for the
+     same stacking reason: shadows always paint outside and behind the box. */
+  box-shadow: var(--shadow-lg), 0 0 60px 6px color-mix(in srgb, var(--sun-400) 20%, transparent);
+
   text-align: center;
   transform: translate3d(0, calc(var(--parallax-y, 0) * 1px), 0);
   transition: transform var(--dur-mid) var(--ease-out), box-shadow var(--dur-mid) var(--ease-out);
@@ -79,19 +107,7 @@
 }
 
 .qr:hover {
-  box-shadow: var(--shadow-lg), 0 0 0 1px color-mix(in srgb, #c93bb7 40%, transparent);
-}
-
-/* Soft Instagram-gradient glow behind the card. */
-.qr::after {
-  content: '';
-  position: absolute;
-  inset: -12%;
-  z-index: -1;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(249, 160, 60, 0.35), rgba(201, 59, 183, 0.28) 45%, transparent 70%);
-  filter: blur(48px);
-  animation: blob 20s var(--ease-in-out) infinite;
+  box-shadow: var(--shadow-lg), 0 0 76px 10px color-mix(in srgb, var(--sun-400) 34%, transparent);
 }
 
 /* The QR plate and its link wrapper are spans/anchors, so they need an explicit
@@ -126,7 +142,12 @@
   top: 0;
   height: 28%;
   border-radius: var(--radius-sm);
-  background: linear-gradient(to bottom, transparent, rgba(247, 86, 111, 0.22), transparent);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--sun-400) 26%, transparent),
+    transparent
+  );
   animation: qr-scan 3.6s var(--ease-in-out) infinite;
   pointer-events: none;
 }
@@ -146,34 +167,41 @@
   }
 }
 
-/* Corner brackets, like a camera viewfinder. */
+/* Corner brackets, like a camera viewfinder. They pick up the rim gradient's
+   direction — warm at the top left, cooling toward the bottom right — so the
+   plate reads as part of the same frame rather than a separate element.
+   `--bracket` is set per corner below. */
 .qr__corner {
   position: absolute;
   width: 22px;
   height: 22px;
-  border: 3px solid var(--ember-400);
+  border: 3px solid var(--bracket, var(--ember-500));
   border-radius: 4px;
 }
 
 .qr__corner--tl {
+  --bracket: var(--sun-500);
   top: 8px;
   left: 8px;
   border-right-color: transparent;
   border-bottom-color: transparent;
 }
 .qr__corner--tr {
+  --bracket: var(--ember-500);
   top: 8px;
   right: 8px;
   border-left-color: transparent;
   border-bottom-color: transparent;
 }
 .qr__corner--bl {
+  --bracket: var(--ember-500);
   bottom: 8px;
   left: 8px;
   border-right-color: transparent;
   border-top-color: transparent;
 }
 .qr__corner--br {
+  --bracket: var(--emerald-400);
   bottom: 8px;
   right: 8px;
   border-left-color: transparent;
