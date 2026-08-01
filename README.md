@@ -150,8 +150,16 @@ The arrangement drops the melody on alternating passes so the loop breathes inst
 repeating flatly, and birdsong chirps — randomised in pitch, length and sweep each time
 — sit over the top. Notes are queued by a lookahead scheduler, so timing does not drift.
 
-Sound is **off by default** and only ever starts from a click. It fades in over two
-seconds, and pauses when the tab is hidden.
+Sound is **on by default**, but browsers refuse to start audio without a user gesture —
+that is a platform rule, not something a page can opt out of. So playback is *armed* on
+load and begins at the visitor's first click, tap or key press. (Scrolling does not
+count as a gesture in Chrome.) It fades in over two seconds and pauses when the tab is
+hidden.
+
+Muting is remembered in `localStorage`, so anyone who turns it off stays turned off on
+every later visit. To ship the site muted by default instead, change the final line of
+`initAudio()` in `src/effects/audio.js` to arm only when the stored preference is
+explicitly `'on'`.
 
 ### Visitor counter
 

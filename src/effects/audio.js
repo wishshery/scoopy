@@ -5,12 +5,33 @@
  * file — it costs no bandwidth, never repeats identically, and sidesteps any
  * licensing question about a recording. The composition itself lives in song.js.
  *
- * Sound is OFF by default and only ever starts from a click, which respects both
- * browser autoplay policy and the visitor.
+ * Sound is ON by default, but browsers will not let audio begin without a user
+ * gesture — that is a platform rule, not something the page can opt out of. So
+ * playback is *armed* on load and starts at the visitor's first click, tap or
+ * key press. Muting is remembered, so anyone who turns it off stays turned off.
  */
 
 import { $, rand, randInt } from '../utils/dom.js';
 import { createSong } from './song.js';
+
+/** Remembered preference: 'on' | 'off'. Unset means on, per the default above. */
+const PREF_KEY = 'scoopy:sound';
+
+function storedPreference() {
+  try {
+    return localStorage.getItem(PREF_KEY);
+  } catch {
+    return null; // storage blocked — fall back to the default
+  }
+}
+
+function rememberPreference(value) {
+  try {
+    localStorage.setItem(PREF_KEY, value);
+  } catch {
+    /* storage blocked — the choice still holds for this page view */
+  }
+}
 
 /**
  * One chirp: a short frequency sweep through a bandpass, with a fast attack and
@@ -119,14 +140,19 @@ export function initAudio() {
   }
 
   button.addEventListener('click', async () => {
+    // An explicit choice at the button supersedes the armed autostart.
+    disarm();
+
     if (on) {
       stop();
       setPressed(false);
+      rememberPreference('off');
       return;
     }
 
     const started = await start();
     setPressed(started);
+    if (started) rememberPreference('on');
 
     if (!started) {
       button.disabled = true;
@@ -151,4 +177,38 @@ export function initAudio() {
   });
 
   setPressed(false);
+
+  /* --- Autostart ---------------------------------------------------------
+     Audio cannot begin until the visitor has interacted with the page, so when
+     sound is enabled we wait for the first qualifying gesture and start then.
+     Note that scrolling does not count as a gesture in Chrome — only pointer,
+     touch and keyboard events do. */
+
+  const GESTURES = ['pointerdown', 'touchstart', 'keydown'];
+  let armedHandler = null;
+
+  function disarm() {
+    if (!armedHandler) return;
+    GESTURES.forEach((type) => window.removeEventListener(type, armedHandler, true));
+    armedHandler = null;
+  }
+
+  function arm() {
+    armedHandler = async (event) => {
+      // Let the button's own handler own that interaction, so a first click on
+      // the control does not both autostart and toggle.
+      if (event.target instanceof Element && event.target.closest('[data-sound-toggle]')) return;
+
+      disarm();
+      const started = await start();
+      setPressed(started);
+    };
+
+    // Capture phase, so this runs even if something stops propagation.
+    GESTURES.forEach((type) =>
+      window.addEventListener(type, armedHandler, { capture: true, passive: true })
+    );
+  }
+
+  if (storedPreference() !== 'off') arm();
 }
