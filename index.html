@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <title>Meet Scoopy — The tiny bird with the biggest personality</title>
+    <meta
+      name="description"
+      content="Scoopy's little corner of the world — an interactive tribute to a Sun Conure with endless curiosity and a heart full of affection."
+    />
+    <meta name="theme-color" content="#fffaf1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#061417" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Social sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Meet Scoopy — The tiny bird with the biggest personality" />
+    <meta
+      property="og:description"
+      content="An interactive tribute to Scoopy the Sun Conure: endless curiosity, boundless energy, and a heart full of affection."
+    />
+    <meta property="og:image" content="media/scoopy-bowtie-wide-1200.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="brand/instagram-qr.png" />
+
+    <!-- Fonts: preconnect early, then load without blocking first paint. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Manrope:wght@400;600;700;800&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Manrope:wght@400;600;700;800&display=swap"
+      />
+    </noscript>
+
+    <script>
+      /* Apply the saved theme before first paint so there is no flash of the
+         wrong colour scheme. Kept inline and tiny on purpose. */
+      (function () {
+        try {
+          var saved = localStorage.getItem('scoopy:theme');
+          if (saved === 'light' || saved === 'dark') {
+            document.documentElement.dataset.theme = saved;
+            document.documentElement.style.colorScheme = saved;
+          }
+        } catch (e) {
+          /* storage blocked — the CSS media query handles it */
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- Rendered server-side-free: this markup paints immediately, before the
+         module bundle has finished loading. -->
+    <div class="preloader" data-preloader role="status" aria-live="polite">
+      <div class="preloader__inner">
+        <span class="preloader__bird" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M15.6 2.6c-3.6 0-6.5 2.8-6.5 6.3 0 1 .2 1.9.6 2.7l-4.5 6.2c-.5.7-.3 1.6.4 2.1.6.4 1.5.3 2-.3l4.4-6c.6.2 1.2.3 1.9.3 3.6 0 6.5-2.8 6.5-6.3 0-2.7-1.7-5-4.8-5zm.7 4.6a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2z"
+            />
+            <path d="M9.7 11.6 4 13.4c-.8.2-1 1.3-.3 1.8l2.6 1.9z" opacity=".55" />
+          </svg>
+        </span>
+        <p class="preloader__label">Scoopy is getting ready&hellip;</p>
+        <span class="preloader__bar" aria-hidden="true"><i></i></span>
+      </div>
+    </div>
+
+    <div id="app"></div>
+
+    <noscript>
+      <div style="padding: 6rem 1.5rem; max-width: 42rem; margin: 0 auto; text-align: center">
+        <h1 style="font-family: Georgia, serif">Meet Scoopy</h1>
+        <p>
+          The tiny bird with the biggest personality. This page uses JavaScript to build its gallery
+          and animations — please enable it, or visit
+          <a href="https://www.instagram.com/scoopsforoops?utm_source=qr">@scoopsforoops</a> on
+          Instagram.
+        </p>
+      </div>
+    </noscript>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

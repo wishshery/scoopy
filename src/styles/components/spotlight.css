@@ -1,0 +1,127 @@
+/* ==========================================================================
+   Photo of the Day — featured card with an animated conic frame
+   ========================================================================== */
+
+.spotlight {
+  position: relative;
+  background: var(--bg);
+  overflow: clip;
+}
+
+.spotlight__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  align-items: center;
+  gap: var(--space-xl);
+  padding: var(--space-lg);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Rotating conic-gradient border.
+   Uses @property so the angle can be interpolated; falls back to a static
+   gradient border in browsers without registered custom properties. */
+@property --frame-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.spotlight__card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: calc(var(--radius-xl) + 2px);
+  background: conic-gradient(
+    from var(--frame-angle),
+    var(--sun-400),
+    var(--ember-400),
+    var(--emerald-400),
+    var(--sky-400),
+    var(--sun-400)
+  );
+  animation: frame-spin 9s linear infinite;
+  filter: blur(0.5px);
+}
+
+@keyframes frame-spin {
+  to {
+    --frame-angle: 360deg;
+  }
+}
+
+.spotlight__media {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.spotlight__media img {
+  transition: transform 1.2s var(--ease-out);
+}
+
+.spotlight__card:hover .spotlight__media img {
+  transform: scale(1.07);
+}
+
+/* Slow light sweep across the photograph. */
+.spotlight__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+  background-size: 300% 100%;
+  animation: shimmer 7s linear infinite;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.spotlight__ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-pill);
+  background: var(--grad-sun);
+  color: #fff;
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-glow);
+}
+
+.spotlight__ribbon svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.spotlight__title {
+  margin: var(--space-sm) 0 0.6rem;
+  font-size: var(--step-3);
+}
+
+.spotlight__text {
+  color: var(--ink-soft);
+  max-width: 42ch;
+}
+
+.spotlight__date {
+  margin-top: var(--space-sm);
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+@media (max-width: 900px) {
+  .spotlight__card {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+}

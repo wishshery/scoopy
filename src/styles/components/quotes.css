@@ -1,0 +1,70 @@
+/* ==========================================================================
+   Quotes — quiet full-width interlude between heavier sections
+   ========================================================================== */
+
+.quotes {
+  position: relative;
+  padding-block: var(--space-2xl);
+  background: var(--bg);
+  overflow: clip;
+}
+
+.quote-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-lg);
+}
+
+.quote {
+  position: relative;
+  padding-top: var(--space-lg);
+  text-align: center;
+}
+
+/* Oversized opening quote mark. */
+.quote::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.15em;
+  left: 50%;
+  translate: -50% 0;
+  font-family: var(--font-display);
+  font-size: 5rem;
+  line-height: 1;
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--sun-400);
+  opacity: 0.55;
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .quote::before {
+    color: transparent;
+  }
+}
+
+.quote blockquote {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-style: italic;
+  line-height: 1.35;
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.quote__rule {
+  width: 2.6rem;
+  height: 2px;
+  margin: var(--space-sm) auto 0;
+  border-radius: 2px;
+  background: var(--grad-sun);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--dur-slow) var(--ease-out) 260ms;
+}
+
+.quote.is-revealed .quote__rule {
+  transform: scaleX(1);
+}

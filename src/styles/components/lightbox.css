@@ -1,0 +1,151 @@
+/* ==========================================================================
+   Lightbox — cinematic full-screen viewer
+   Built on <dialog> so focus trapping and Escape-to-close come from the platform.
+   ========================================================================== */
+
+.lightbox {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100svh;
+  max-height: 100svh;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  overflow: hidden;
+}
+
+.lightbox::backdrop {
+  background: rgba(3, 16, 18, 0.86);
+  opacity: 0;
+  transition: opacity var(--dur-mid) var(--ease-out);
+}
+
+.lightbox[open]::backdrop {
+  opacity: 1;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .lightbox::backdrop {
+    backdrop-filter: blur(14px);
+  }
+}
+
+.lightbox__inner {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: var(--space-sm);
+  height: 100%;
+  padding: clamp(3.5rem, 6vw, 5rem) clamp(1rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 3rem);
+}
+
+.lightbox__stage {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+.lightbox__img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-md);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity var(--dur-mid) var(--ease-out), transform var(--dur-mid) var(--ease-spring);
+}
+
+.lightbox__img.is-ready {
+  opacity: 1;
+  transform: none;
+}
+
+/* Slide direction applied briefly while stepping between photos. */
+.lightbox__img.is-leaving-next {
+  opacity: 0;
+  transform: translateX(-6%) scale(0.96);
+}
+
+.lightbox__img.is-leaving-prev {
+  opacity: 0;
+  transform: translateX(6%) scale(0.96);
+}
+
+.lightbox__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.4rem 1rem;
+  text-align: center;
+}
+
+.lightbox__caption {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+}
+
+.lightbox__count {
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Controls ------------------------------------------------------------ */
+
+.lightbox__btn {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 3.1rem;
+  height: 3.1rem;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-spring);
+}
+
+.lightbox__btn:hover {
+  background: rgba(255, 255, 255, 0.26);
+  transform: scale(1.08);
+}
+
+.lightbox__btn svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.lightbox__btn--close {
+  top: 1.1rem;
+  right: 1.1rem;
+}
+
+.lightbox__btn--prev {
+  top: 50%;
+  left: clamp(0.6rem, 2vw, 1.6rem);
+  translate: 0 -50%;
+}
+
+.lightbox__btn--next {
+  top: 50%;
+  right: clamp(0.6rem, 2vw, 1.6rem);
+  translate: 0 -50%;
+}
+
+/* Hide the step controls when there is only one photo to look at. */
+.lightbox[data-single='true'] .lightbox__btn--prev,
+.lightbox[data-single='true'] .lightbox__btn--next {
+  display: none;
+}
+
+/* Prevent the page behind the dialog from scrolling. */
+body.is-locked {
+  overflow: hidden;
+}

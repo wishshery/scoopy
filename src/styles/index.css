@@ -1,0 +1,24 @@
+/* ==========================================================================
+   Stylesheet entry point.
+   Order matters: tokens define the variables everything else consumes, base
+   sets document defaults, animations declare shared keyframes, then components.
+   ========================================================================== */
+
+@import './tokens.css';
+@import './base.css';
+@import './animations.css';
+
+@import './components/nav.css';
+@import './components/hero.css';
+@import './components/about.css';
+@import './components/personality.css';
+@import './components/timeline.css';
+@import './components/gallery.css';
+@import './components/lightbox.css';
+@import './components/facts.css';
+@import './components/spotlight.css';
+@import './components/memories.css';
+@import './components/quotes.css';
+@import './components/follow.css';
+@import './components/footer.css';
+@import './components/controls.css';

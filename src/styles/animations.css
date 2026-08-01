@@ -1,0 +1,292 @@
+/* ==========================================================================
+   Animations — keyframes, the scroll-reveal system, and ambient decoration
+   All motion here is transform/opacity only so it stays on the compositor.
+   ========================================================================== */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes drift-y {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -16px, 0);
+  }
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+  70% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 50%;
+  }
+  to {
+    background-position: -200% 50%;
+  }
+}
+
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4%, -6%, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-5%, 4%, 0) scale(0.94);
+  }
+}
+
+@keyframes cloud-drift {
+  from {
+    transform: translate3d(-30vw, 0, 0);
+  }
+  to {
+    transform: translate3d(130vw, 0, 0);
+  }
+}
+
+@keyframes scroll-hint {
+  0% {
+    opacity: 0;
+    transform: translateY(-40%);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(150%);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- Scroll reveal -------------------------------------------------------
+   Elements marked `data-reveal` start hidden and are unhidden by IntersectionObserver
+   adding `.is-revealed`. `--reveal-delay` staggers siblings. */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-y, 28px), 0) scale(var(--reveal-scale, 1));
+  transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: transform, opacity;
+}
+
+[data-reveal='left'] {
+  transform: translate3d(-36px, 0, 0);
+}
+
+[data-reveal='right'] {
+  transform: translate3d(36px, 0, 0);
+}
+
+[data-reveal='zoom'] {
+  --reveal-scale: 0.94;
+  --reveal-y: 12px;
+}
+
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Reveal masked text lines (used by the hero headline). */
+.line-mask {
+  display: block;
+  overflow: hidden;
+}
+
+.line-mask > span {
+  display: block;
+  transform: translate3d(0, 105%, 0) rotate(2deg);
+  transition: transform var(--dur-reveal) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.is-revealed .line-mask > span,
+.line-mask.is-revealed > span {
+  transform: none;
+}
+
+/* --- Ambient decorative layers ------------------------------------------ */
+
+/* Full-bleed canvas host for particles, feathers and bird silhouettes. */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ambient__canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Soft coloured gradient orbs that slowly wander behind the content. */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.75;
+  animation: blob 26s var(--ease-in-out) infinite;
+  will-change: transform;
+}
+
+.orb--sun {
+  background: radial-gradient(circle at 35% 35%, var(--glow-warm), transparent 70%);
+}
+.orb--ember {
+  background: radial-gradient(circle at 40% 40%, var(--glow-ember), transparent 70%);
+}
+.orb--emerald {
+  background: radial-gradient(circle at 45% 45%, var(--glow-emerald), transparent 70%);
+}
+.orb--sky {
+  background: radial-gradient(circle at 45% 45%, var(--glow-sky), transparent 70%);
+}
+
+/* Tropical leaves anchored to section corners; they sway with the breeze. */
+.leaf {
+  position: absolute;
+  width: clamp(120px, 18vw, 280px);
+  color: var(--emerald-400);
+  opacity: 0.16;
+  transform-origin: top center;
+  animation: sway 11s var(--ease-in-out) infinite;
+  pointer-events: none;
+}
+
+[data-theme='dark'] .leaf {
+  opacity: 0.22;
+}
+
+.leaf--tl {
+  top: -3%;
+  left: -4%;
+  rotate: 18deg;
+}
+.leaf--tr {
+  top: -5%;
+  right: -5%;
+  rotate: -150deg;
+  animation-delay: -3.5s;
+}
+.leaf--bl {
+  bottom: -4%;
+  left: -6%;
+  rotate: 120deg;
+  animation-delay: -6s;
+}
+.leaf--br {
+  bottom: -3%;
+  right: -4%;
+  rotate: -20deg;
+  animation-delay: -1.8s;
+}
+
+/* Slow clouds crossing the hero. */
+.cloud {
+  position: absolute;
+  color: #fff;
+  opacity: 0.5;
+  animation: cloud-drift linear infinite;
+  will-change: transform;
+}
+
+[data-theme='dark'] .cloud {
+  opacity: 0.1;
+}
+
+/* Cursor feather trail particles are absolutely positioned by JS. */
+.trail-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.trail-feather {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  color: var(--sun-400);
+  will-change: transform, opacity;
+}
+
+/* --- Reduced motion ------------------------------------------------------
+   Honour the user's system setting: content still appears, it just stops moving.
+   Reveal elements are forced visible so nothing is ever stuck hidden. */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .line-mask > span {
+    transform: none !important;
+  }
+
+  .ambient,
+  .trail-layer,
+  .cloud {
+    display: none !important;
+  }
+}

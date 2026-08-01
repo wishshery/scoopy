@@ -1,0 +1,264 @@
+/* ==========================================================================
+   Hero — full-viewport portrait, parallax layers, staged headline reveal
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  display: grid;
+  min-height: 100svh;
+  padding-block: calc(var(--header-h) + 2rem) var(--space-xl);
+  overflow: clip;
+  isolation: isolate;
+}
+
+/* Sky wash sitting behind the photograph. */
+.hero__sky {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  background: var(--grad-dawn);
+}
+
+.hero__clouds {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  overflow: hidden;
+}
+
+/* --- Photograph ---------------------------------------------------------- */
+
+.hero__figure {
+  position: absolute;
+  /* Vertical overscan so the parallax shift never exposes the edge of the photo. */
+  inset: -18% 0;
+  z-index: -2;
+  overflow: hidden;
+  /* Driven by the parallax module. */
+  transform: translate3d(0, calc(var(--parallax-y, 0) * 1px), 0);
+  will-change: transform;
+}
+
+.hero__figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  /* A very slow push-in keeps the frame feeling alive without distracting. */
+  animation: hero-breathe 26s var(--ease-in-out) infinite alternate;
+}
+
+@keyframes hero-breathe {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+
+/* Legibility scrim. Two gradients: one for the copy column, one at the base. */
+.hero__figure::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      100deg,
+      color-mix(in srgb, var(--scrim) 92%, transparent) 0%,
+      color-mix(in srgb, var(--scrim) 72%, transparent) 34%,
+      color-mix(in srgb, var(--scrim) 28%, transparent) 58%,
+      transparent 78%
+    ),
+    linear-gradient(to top, var(--bg) 1%, transparent 32%),
+    radial-gradient(120% 80% at 78% 30%, transparent 40%, color-mix(in srgb, var(--scrim) 70%, transparent) 100%);
+}
+
+/* --- Copy ---------------------------------------------------------------- */
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--space-md);
+  width: var(--shell);
+  margin-inline: auto;
+  max-width: 100%;
+  color: #fff;
+}
+
+/* Entrance state for the copy. `playHeroIntro()` adds `.is-revealed` once the
+   preloader clears; the staggered `--reveal-delay` is set per element inline. */
+.hero [data-hero-el] {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.hero [data-hero-el].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1.1rem 0.5rem 0.5rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .hero__badge {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+}
+
+.hero__badge b {
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--grad-sun);
+  font-size: 0.85rem;
+}
+
+.hero__title {
+  margin: 0;
+  color: #fff;
+  font-size: var(--step-6);
+  font-weight: 600;
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  text-shadow: 0 6px 40px rgba(4, 25, 27, 0.45);
+}
+
+.hero__title em {
+  font-style: normal;
+  background: linear-gradient(96deg, var(--sun-300) 0%, var(--sun-400) 40%, var(--ember-300) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* text-shadow does not apply to background-clipped text, so the separation
+     from the photograph behind comes from a drop-shadow filter instead. */
+  filter: drop-shadow(0 4px 22px rgba(4, 25, 27, 0.55));
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .hero__title em {
+    color: transparent;
+  }
+}
+
+.hero__sub {
+  max-width: 34ch;
+  font-size: var(--step-2);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 24px rgba(4, 25, 27, 0.5);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.hero__actions .btn--ghost {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.hero__actions .btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #fff;
+}
+
+/* Pulsing halo behind the primary call to action. */
+.btn--pulse::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  border: 2px solid var(--sun-300);
+  animation: pulse-ring 2.8s var(--ease-out) infinite;
+}
+
+/* --- Scroll cue ---------------------------------------------------------- */
+
+.hero__cue {
+  position: absolute;
+  left: 50%;
+  bottom: 1.6rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  translate: -50% 0;
+  color: var(--ink-soft);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.hero__cue-track {
+  position: relative;
+  width: 24px;
+  height: 38px;
+  border-radius: var(--radius-pill);
+  border: 2px solid currentColor;
+  opacity: 0.6;
+  overflow: hidden;
+}
+
+.hero__cue-track::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 3px;
+  height: 8px;
+  border-radius: 2px;
+  background: currentColor;
+  translate: -50% 0;
+  animation: scroll-hint 2s var(--ease-in-out) infinite;
+}
+
+@media (max-width: 700px) {
+  /* A portrait viewport crops this landscape photo hard from the sides, so the
+     full height is kept in frame (no overscan, no parallax drift) and the
+     horizontal window is centred on Scoopy rather than the frame. */
+  .hero__figure {
+    inset: 0;
+    transform: none;
+  }
+
+  .hero__figure img {
+    object-position: 53% 50%;
+    animation: none;
+  }
+
+  .hero__cue {
+    display: none;
+  }
+}

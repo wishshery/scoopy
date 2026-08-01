@@ -1,0 +1,128 @@
+/* ==========================================================================
+   Personality — interactive cards with a cursor-tracked spotlight
+   ========================================================================== */
+
+.personality {
+  position: relative;
+  background: var(--bg-alt);
+  overflow: clip;
+}
+
+.trait-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--space-md);
+}
+
+.trait {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-lg) var(--space-md) var(--space-md);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--dur-mid) var(--ease-out), box-shadow var(--dur-mid) var(--ease-out),
+    border-color var(--dur-mid) var(--ease-out);
+}
+
+/* Cursor spotlight. `--mx`/`--my` are written by the card's pointer handler. */
+.trait::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in srgb, var(--sun-300) 34%, transparent),
+    transparent 68%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-mid) var(--ease-out);
+}
+
+/* Gradient hairline that lights up along the top edge. */
+.trait::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--grad-sun);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.trait:hover,
+.trait:focus-within {
+  transform: translateY(-8px);
+  border-color: transparent;
+  box-shadow: var(--shadow-lg);
+}
+
+.trait:hover::before,
+.trait:focus-within::before {
+  opacity: 1;
+}
+
+.trait:hover::after,
+.trait:focus-within::after {
+  transform: scaleX(1);
+}
+
+.trait__icon {
+  display: grid;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--sun-300) 26%, transparent);
+  color: var(--ember-500);
+  transition: transform var(--dur-mid) var(--ease-spring), background var(--dur-mid) var(--ease-out);
+}
+
+[data-theme='dark'] .trait__icon {
+  color: var(--sun-300);
+}
+
+.trait:hover .trait__icon {
+  transform: rotate(-8deg) scale(1.1);
+  background: color-mix(in srgb, var(--sun-400) 42%, transparent);
+}
+
+.trait__icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.trait__title {
+  font-size: var(--step-1);
+  letter-spacing: -0.015em;
+}
+
+.trait__body {
+  color: var(--ink-soft);
+  font-size: var(--step-0);
+}
+
+/* Ordinal watermark in the corner. */
+.trait__num {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-md);
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0.07;
+  transition: opacity var(--dur-mid) var(--ease-out), transform var(--dur-mid) var(--ease-out);
+}
+
+.trait:hover .trait__num {
+  opacity: 0.16;
+  transform: translateY(-4px);
+}

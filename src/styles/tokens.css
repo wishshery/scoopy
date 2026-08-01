@@ -1,0 +1,215 @@
+/* ==========================================================================
+   Design tokens
+   Colour, type, space, motion and elevation primitives. Every other stylesheet
+   consumes these — no raw hex values or magic numbers should appear elsewhere.
+   ========================================================================== */
+
+:root {
+  /* --- Brand ramps -------------------------------------------------------
+     Sampled from Scoopy: golden yellow crown, sunset-orange cheeks, emerald
+     wing tips, deep teal shadows, sky-blue highlights. */
+
+  --sun-100: #fff3cf;
+  --sun-200: #ffe49a;
+  --sun-300: #ffd25c;
+  --sun-400: #ffc01e;
+  --sun-500: #f5a600;
+  --sun-600: #d18700;
+
+  --ember-100: #ffe0cd;
+  --ember-200: #ffbc93;
+  --ember-300: #ff9257;
+  --ember-400: #ff7a2f;
+  --ember-500: #ea5717;
+  --ember-600: #c03f0c;
+
+  --emerald-100: #d3f0e0;
+  --emerald-200: #92dcb6;
+  --emerald-300: #45bd85;
+  --emerald-400: #1e9b63;
+  --emerald-500: #157a4d;
+  --emerald-600: #0e5a39;
+
+  --teal-100: #cfe6e6;
+  --teal-200: #86bcbd;
+  --teal-300: #3c8a8c;
+  --teal-400: #175d60;
+  --teal-500: #0d4144;
+  --teal-600: #072b2e;
+  --teal-700: #04191b;
+
+  --sky-100: #dff2fd;
+  --sky-200: #a9ddf6;
+  --sky-300: #6ec5ec;
+  --sky-400: #35a9de;
+  --sky-500: #1b87b8;
+
+  --warm-white: #fffaf1;
+  --warm-sand: #f7eddd;
+  --cream: #fdf4e6;
+
+  /* --- Semantic surface + text (light theme is the default) -------------- */
+  --bg: var(--warm-white);
+  --bg-alt: var(--cream);
+  --bg-deep: var(--warm-sand);
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+
+  --ink: #14211f;
+  --ink-soft: #46564f;
+  --ink-faint: #7b8a83;
+  --hairline: rgba(20, 33, 31, 0.1);
+  --hairline-strong: rgba(20, 33, 31, 0.18);
+
+  --accent: var(--ember-500);
+  --accent-ink: #ffffff;
+  --focus-ring: var(--emerald-400);
+
+  /* Glass morphism — tuned per theme so blur panels stay legible in both. */
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-blur: 18px;
+
+  /* Ambient decorative washes */
+  --glow-warm: rgba(255, 192, 30, 0.42);
+  --glow-ember: rgba(255, 122, 47, 0.32);
+  --glow-emerald: rgba(30, 155, 99, 0.24);
+  --glow-sky: rgba(53, 169, 222, 0.24);
+  --particle-tint: 42, 100%, 58%;
+  --scrim: rgba(7, 43, 46, 0.55);
+
+  /* --- Gradients --------------------------------------------------------- */
+  --grad-sun: linear-gradient(120deg, var(--sun-400) 0%, var(--ember-400) 58%, var(--ember-500) 100%);
+  --grad-jungle: linear-gradient(140deg, var(--emerald-400) 0%, var(--teal-400) 70%);
+  --grad-dawn: linear-gradient(180deg, var(--sky-200) 0%, var(--sun-200) 55%, var(--ember-200) 100%);
+  --grad-text: linear-gradient(96deg, var(--sun-500) 0%, var(--ember-400) 42%, var(--emerald-400) 100%);
+
+  /* --- Typography -------------------------------------------------------- */
+  --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-body: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Fluid scale — clamp() keeps headings proportionate from 360px to 1600px. */
+  --step--1: clamp(0.82rem, 0.79rem + 0.14vw, 0.9rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.12rem);
+  --step-1: clamp(1.2rem, 1.12rem + 0.4vw, 1.45rem);
+  --step-2: clamp(1.45rem, 1.3rem + 0.75vw, 1.95rem);
+  --step-3: clamp(1.8rem, 1.5rem + 1.4vw, 2.75rem);
+  --step-4: clamp(2.2rem, 1.7rem + 2.4vw, 3.9rem);
+  --step-5: clamp(2.8rem, 1.9rem + 4.2vw, 5.6rem);
+  --step-6: clamp(3.4rem, 1.8rem + 7.2vw, 8.5rem);
+
+  --leading-tight: 1.04;
+  --leading-snug: 1.22;
+  --leading-body: 1.68;
+  --tracking-wide: 0.16em;
+  --tracking-tight: -0.022em;
+
+  /* --- Space + shape ----------------------------------------------------- */
+  --space-2xs: 0.375rem;
+  --space-xs: 0.625rem;
+  --space-sm: 1rem;
+  --space-md: 1.6rem;
+  --space-lg: 2.6rem;
+  --space-xl: 4.2rem;
+  --space-2xl: clamp(4.5rem, 3rem + 7vw, 9rem);
+
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-xl: 40px;
+  --radius-pill: 999px;
+
+  --measure: 62ch;
+  --shell: min(100% - 2.5rem, 1240px);
+  --shell-narrow: min(100% - 2.5rem, 940px);
+
+  /* --- Elevation --------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgba(20, 33, 31, 0.06), 0 4px 12px rgba(20, 33, 31, 0.05);
+  --shadow-md: 0 4px 10px rgba(20, 33, 31, 0.06), 0 18px 40px rgba(20, 33, 31, 0.09);
+  --shadow-lg: 0 10px 24px rgba(20, 33, 31, 0.09), 0 36px 80px rgba(20, 33, 31, 0.14);
+  --shadow-glow: 0 18px 46px rgba(234, 87, 23, 0.28);
+
+  /* --- Motion ------------------------------------------------------------
+     Named easings keep animation personality consistent across components. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 180ms;
+  --dur-mid: 420ms;
+  --dur-slow: 780ms;
+  --dur-reveal: 1000ms;
+
+  --header-h: 72px;
+}
+
+/* --- Dark theme ----------------------------------------------------------
+   Applied by the theme toggle via [data-theme="dark"] on <html>. The default
+   below (`:root:not([data-theme])`) also honours the OS preference on first
+   visit, before the user has expressed a choice. */
+
+[data-theme='dark'] {
+  --bg: #061417;
+  --bg-alt: #081c1f;
+  --bg-deep: #040f11;
+  --surface: #0c2427;
+  --surface-raised: #103034;
+
+  --ink: #f1f8f4;
+  --ink-soft: #b3c8c2;
+  --ink-faint: #7d968f;
+  --hairline: rgba(241, 248, 244, 0.12);
+  --hairline-strong: rgba(241, 248, 244, 0.22);
+
+  --accent: var(--sun-400);
+  --accent-ink: #1a1200;
+  --focus-ring: var(--sun-300);
+
+  --glass-bg: rgba(12, 36, 39, 0.58);
+  --glass-border: rgba(255, 255, 255, 0.12);
+
+  --glow-warm: rgba(255, 192, 30, 0.3);
+  --glow-ember: rgba(255, 122, 47, 0.24);
+  --glow-emerald: rgba(30, 155, 99, 0.3);
+  --glow-sky: rgba(53, 169, 222, 0.22);
+  --scrim: rgba(2, 10, 11, 0.66);
+
+  --grad-dawn: linear-gradient(180deg, #0a2b34 0%, #123037 55%, #1d2a24 100%);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45), 0 22px 48px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.5), 0 44px 90px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 18px 46px rgba(255, 192, 30, 0.22);
+}
+
+/* First-visit default: follow the operating system until the user picks. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #061417;
+    --bg-alt: #081c1f;
+    --bg-deep: #040f11;
+    --surface: #0c2427;
+    --surface-raised: #103034;
+
+    --ink: #f1f8f4;
+    --ink-soft: #b3c8c2;
+    --ink-faint: #7d968f;
+    --hairline: rgba(241, 248, 244, 0.12);
+    --hairline-strong: rgba(241, 248, 244, 0.22);
+
+    --accent: var(--sun-400);
+    --accent-ink: #1a1200;
+    --focus-ring: var(--sun-300);
+
+    --glass-bg: rgba(12, 36, 39, 0.58);
+    --glass-border: rgba(255, 255, 255, 0.12);
+
+    --glow-emerald: rgba(30, 155, 99, 0.3);
+    --scrim: rgba(2, 10, 11, 0.66);
+    --grad-dawn: linear-gradient(180deg, #0a2b34 0%, #123037 55%, #1d2a24 100%);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45), 0 22px 48px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.5), 0 44px 90px rgba(0, 0, 0, 0.55);
+    --shadow-glow: 0 18px 46px rgba(255, 192, 30, 0.22);
+  }
+}

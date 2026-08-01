@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Daily routine — vertical timeline with a scroll-linked progress rail
+   ========================================================================== */
+
+.routine {
+  position: relative;
+  background: var(--bg);
+  overflow: clip;
+}
+
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding-left: 3.5rem;
+}
+
+/* Static rail. */
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  left: 1.03rem;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--hairline-strong);
+}
+
+/* Progress rail — `--progress` (0-1) is written by the scroll handler. */
+.timeline__progress {
+  position: absolute;
+  top: 0.6rem;
+  left: 1.03rem;
+  width: 2px;
+  height: calc(100% - 1.2rem);
+  border-radius: 2px;
+  background: var(--grad-sun);
+  transform: scaleY(var(--progress, 0));
+  transform-origin: top;
+  transition: transform 120ms linear;
+}
+
+.tl-item {
+  position: relative;
+}
+
+.tl-item__dot {
+  position: absolute;
+  top: 0.35rem;
+  left: -3.5rem;
+  display: grid;
+  place-items: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--hairline-strong);
+  color: var(--ember-500);
+  transition: border-color var(--dur-mid) var(--ease-out), background var(--dur-mid) var(--ease-out),
+    transform var(--dur-mid) var(--ease-spring), color var(--dur-mid) var(--ease-out);
+}
+
+.tl-item__dot svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.tl-item.is-revealed .tl-item__dot {
+  border-color: transparent;
+  background: var(--grad-sun);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.tl-item__time {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  font-size: var(--step--1);
+  font-weight: 800;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ember-500);
+}
+
+[data-theme='dark'] .tl-item__time {
+  color: var(--sun-300);
+}
+
+.tl-item__title {
+  font-size: var(--step-2);
+  margin-bottom: 0.35rem;
+}
+
+.tl-item__body {
+  max-width: 54ch;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 600px) {
+  .timeline {
+    padding-left: 2.9rem;
+  }
+
+  .timeline::before,
+  .timeline__progress {
+    left: 0.78rem;
+  }
+
+  .tl-item__dot {
+    left: -2.9rem;
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+}

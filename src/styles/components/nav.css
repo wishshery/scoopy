@@ -1,0 +1,243 @@
+/* ==========================================================================
+   Site header — floating glass navigation with scroll-spy
+   ========================================================================== */
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 90;
+  display: flex;
+  justify-content: center;
+  padding-top: 0.9rem;
+  transition: transform var(--dur-mid) var(--ease-out), padding-top var(--dur-mid) var(--ease-out);
+}
+
+/* Hides the bar while scrolling down, brings it back on scroll up. */
+.site-header.is-hidden {
+  transform: translateY(-140%);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: var(--shell);
+  padding: 0.5rem 0.6rem 0.5rem 1.1rem;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+  transition: background var(--dur-mid) var(--ease-out), border-color var(--dur-mid) var(--ease-out),
+    box-shadow var(--dur-mid) var(--ease-out), width var(--dur-mid) var(--ease-out);
+}
+
+/* Only becomes a glass pill once the page has scrolled past the hero lip. */
+.site-header.is-stuck .nav {
+  width: min(100% - 2.5rem, 1120px);
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  box-shadow: var(--shadow-md);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .site-header.is-stuck .nav {
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+  }
+}
+
+.nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav__mark {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  background: var(--grad-sun);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-mid) var(--ease-spring);
+}
+
+.nav__brand:hover .nav__mark {
+  transform: rotate(-12deg) scale(1.08);
+}
+
+.nav__mark svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  margin-inline: auto;
+}
+
+.nav__link {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.nav__link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-spring);
+}
+
+.nav__link:hover,
+.nav__link[aria-current='true'] {
+  color: var(--ink);
+}
+
+.nav__link:hover::before,
+.nav__link[aria-current='true']::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.nav__link span {
+  position: relative;
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* --- Icon buttons (theme, sound, menu) ---------------------------------- */
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  background: color-mix(in srgb, var(--surface) 65%, transparent);
+  transition: transform var(--dur-fast) var(--ease-spring), background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.icon-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.icon-btn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+/* Sun/moon crossfade inside the theme toggle. */
+.icon-btn__swap {
+  display: grid;
+  place-items: center;
+}
+
+.icon-btn__swap > * {
+  grid-area: 1 / 1;
+  transition: opacity var(--dur-mid) var(--ease-out), transform var(--dur-mid) var(--ease-spring);
+}
+
+.icon-btn__swap [data-when='dark'] {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+[data-theme='dark'] .icon-btn__swap [data-when='light'] {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+[data-theme='dark'] .icon-btn__swap [data-when='dark'] {
+  opacity: 1;
+  transform: none;
+}
+
+.nav__toggle {
+  display: none;
+}
+
+/* --- Mobile ------------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .nav__toggle {
+    display: grid;
+  }
+
+  .nav__list {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.2rem;
+    padding: 0.7rem;
+    border-radius: var(--radius-lg);
+    /* More opaque than the standard glass panel — this one sits over the hero
+       photograph, where 62% white does not give the link text enough contrast. */
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+    visibility: hidden;
+    transition: opacity var(--dur-mid) var(--ease-out), transform var(--dur-mid) var(--ease-out),
+      visibility var(--dur-mid);
+  }
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .nav__list {
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+      backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    }
+  }
+
+  .nav[data-open='true'] .nav__list {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+  }
+
+  .nav__link {
+    padding: 0.85rem 1rem;
+    font-size: var(--step-0);
+  }
+
+  .site-header.is-stuck .nav,
+  .nav {
+    width: min(100% - 1.5rem, 1120px);
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    box-shadow: var(--shadow-md);
+  }
+}

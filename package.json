@@ -1,0 +1,17 @@
+{
+  "name": "scoopy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Scoopy's little corner of the world — an interactive single-page tribute to a Sun Conure.",
+  "type": "module",
+  "scripts": {
+    "images": "node scripts/process-images.mjs",
+    "dev": "npm run images && vite",
+    "build": "npm run images && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.2",
+    "vite": "^7.0.0"
+  }
+}

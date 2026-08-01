@@ -1,0 +1,136 @@
+/* ==========================================================================
+   About — layered storytelling block with an offset portrait
+   ========================================================================== */
+
+.about {
+  position: relative;
+  background: var(--bg);
+  overflow: clip;
+}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: 1fr 0.86fr;
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+.about__body p + p {
+  margin-top: var(--space-sm);
+}
+
+.about__body p {
+  color: var(--ink-soft);
+  font-size: var(--step-1);
+  max-width: 46ch;
+}
+
+/* Opening paragraph is set larger, in the display face, as a pull-quote lead. */
+.about__lead {
+  color: var(--ink);
+  font-size: var(--step-2);
+  font-family: var(--font-display);
+  line-height: 1.42;
+}
+
+/* Small stat chips beneath the prose. */
+.about__highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-lg);
+}
+
+.about__chip {
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-mid) var(--ease-spring), box-shadow var(--dur-mid) var(--ease-out);
+}
+
+.about__chip:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.about__chip b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  line-height: 1.1;
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--ember-500);
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .about__chip b {
+    color: transparent;
+  }
+}
+
+.about__chip span {
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+}
+
+/* --- Portrait ------------------------------------------------------------ */
+
+.about__figure {
+  position: relative;
+  transform: translate3d(0, calc(var(--parallax-y, 0) * 1px), 0);
+  will-change: transform;
+}
+
+.about__frame {
+  position: relative;
+  border-radius: var(--radius-xl);
+  aspect-ratio: 3 / 4;
+  box-shadow: var(--shadow-lg);
+  z-index: 1;
+}
+
+.about__frame img {
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.about__figure:hover .about__frame img {
+  transform: scale(1.06);
+}
+
+/* Offset outline that gives the portrait depth. */
+.about__figure::before {
+  content: '';
+  position: absolute;
+  inset: 8% -7% -8% 7%;
+  border-radius: var(--radius-xl);
+  border: 1.5px solid var(--emerald-300);
+  opacity: 0.5;
+}
+
+/* Warm glow bleeding out from behind the frame. */
+.about__figure::after {
+  content: '';
+  position: absolute;
+  inset: -14%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--glow-warm), transparent 66%);
+  filter: blur(40px);
+}
+
+@media (max-width: 900px) {
+  .about__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .about__figure {
+    max-width: 420px;
+    margin-inline: auto;
+  }
+}
