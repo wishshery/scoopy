@@ -236,10 +236,42 @@
   margin: 0;
 }
 
-/* Below this width the right margin is no longer clear of Scoopy, and a 380px
-   card starts crowding the headline. The Follow section carries the code there. */
+/* The card shrinks rather than disappearing on smaller screens — there is room
+   in the top-right corner at every width, above the headline. `.qr` sizes its
+   frame from the wrapper width, so overriding that scales the whole card: code,
+   brackets and label together. */
 @media (max-width: 1400px) {
   .hero .qr--hero {
+    width: clamp(108px, 15vw, 200px);
+    padding: 0.5rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .hero .qr--hero .qr__frame {
+    padding: 0.4rem;
+  }
+
+  .hero .qr--hero .qr__label {
+    margin-top: 0.45rem;
+    font-size: 0.56rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* The viewfinder brackets stop reading as brackets at this scale. */
+  .hero .qr--hero .qr__corner {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .hero .qr--hero {
+    top: calc(var(--header-h) + 0.6rem);
+    right: 0.9rem;
+  }
+
+  /* On a phone the code is a tap target more than a scan target, so the caption
+     is dropped; the Follow section still carries the full-size scannable one. */
+  .hero .qr--hero .qr__label {
     display: none;
   }
 }

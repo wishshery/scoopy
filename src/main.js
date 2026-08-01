@@ -34,6 +34,7 @@ import { initParallax } from './effects/parallax.js';
 import { initReveal } from './effects/reveal.js';
 import { initTheme } from './effects/theme.js';
 import { initAudio } from './effects/audio.js';
+import { initVisitorCounter } from './effects/visitors.js';
 
 /** The photo marked `feature: true` in photos.meta.json, else the first one. */
 function featurePhoto(list) {
@@ -87,6 +88,7 @@ function boot() {
   initCounters();
   initLightbox(buildTiles(photos));
   initAudio();
+  initVisitorCounter(); // network-bound and non-critical; never awaited
 
   initAmbient($('[data-ambient]'));
   initCursorTrail($('[data-trail]'));

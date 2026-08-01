@@ -31,6 +31,16 @@ export function renderFooter() {
           >${icons.instagram}</a>
         </div>
 
+        <!-- Revealed by initVisitorCounter() once a count actually arrives, so a
+             blocked or unavailable service leaves no empty chip behind. -->
+        <p class="footer__visitors" data-visitors hidden>
+          <span class="footer__visitors-dot" aria-hidden="true"></span>
+          <span>
+            <b data-visitor-count>0</b>
+            visits to Scoopy&rsquo;s corner
+          </span>
+        </p>
+
         <div class="footer__rule" role="presentation"></div>
 
         <p class="footer__fine">

@@ -140,8 +140,29 @@ scripts/
 
 ### Audio
 
-The bird song is **synthesised with the Web Audio API**, not loaded as a file: it costs
-no bandwidth, never repeats identically, and raises no licensing question.
+"Scoopy's Song" is an **original piece, synthesised live with the Web Audio API** — no
+audio file is downloaded. `src/effects/song.js` holds the composition: D major, 72bpm,
+an eight-bar progression (D–Bm–G–A–D–F#m–G–A) under a sixteen-bar melody, played by
+three synth voices (a detuned-saw pad, a music-box pluck, a sine bass) through a
+reverb whose impulse response is generated from decaying noise.
+
+The arrangement drops the melody on alternating passes so the loop breathes instead of
+repeating flatly, and birdsong chirps — randomised in pitch, length and sweep each time
+— sit over the top. Notes are queued by a lookahead scheduler, so timing does not drift.
+
+Sound is **off by default** and only ever starts from a click. It fades in over two
+seconds, and pauses when the tab is hidden.
+
+### Visitor counter
+
+The footer count comes from [Abacus](https://abacus.jasoncameron.dev), a small
+open-source hit counter — the site is static, so the number has to live somewhere.
+It stores a single integer against a key: no cookie, no identifier, nothing about the
+visitor. Each browser is counted once per session, so refreshing does not inflate it.
+
+It is treated as decoration, not content: if the service is slow, blocked or gone, the
+element stays hidden rather than showing a broken or zero state. To change where the
+count lives, edit `NAMESPACE`/`KEY` in `src/effects/visitors.js`.
 
 ---
 

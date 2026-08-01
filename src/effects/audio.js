@@ -1,20 +1,21 @@
 /**
- * Gentle ambient bird song.
+ * Ambient sound: Scoopy's song, with birdsong over the top.
  *
- * The chirps are synthesised with the Web Audio API rather than loaded as a
- * media file: it costs no bandwidth, never repeats identically, and sidesteps
- * any licensing question about a recording.
+ * Everything is synthesised with the Web Audio API rather than loaded as a media
+ * file — it costs no bandwidth, never repeats identically, and sidesteps any
+ * licensing question about a recording. The composition itself lives in song.js.
  *
  * Sound is OFF by default and only ever starts from a click, which respects both
  * browser autoplay policy and the visitor.
  */
 
 import { $, rand, randInt } from '../utils/dom.js';
+import { createSong } from './song.js';
 
 /**
- * One chirp: a short frequency sweep through a bandpass filter, with a fast
- * attack and a soft exponential decay. Small random variation in pitch, length
- * and sweep direction keeps successive chirps from sounding mechanical.
+ * One chirp: a short frequency sweep through a bandpass, with a fast attack and
+ * a soft decay. Small random variation in pitch, length and sweep direction
+ * keeps successive chirps from sounding mechanical.
  */
 function chirp(ctx, destination, time) {
   const osc = ctx.createOscillator();
@@ -49,6 +50,7 @@ export function initAudio() {
 
   let ctx = null;
   let master = null;
+  let song = null;
   let timer = null;
   let on = false;
 
@@ -63,7 +65,8 @@ export function initAudio() {
       chirp(ctx, master, now + i * rand(0.09, 0.22));
     }
 
-    timer = setTimeout(scheduleBurst, rand(1800, 5200));
+    // Sparser than the music, so the birds decorate rather than compete.
+    timer = setTimeout(scheduleBurst, rand(4000, 9000));
   }
 
   async function start() {
@@ -75,6 +78,7 @@ export function initAudio() {
       master = ctx.createGain();
       master.gain.value = 0.0001;
       master.connect(ctx.destination);
+      song = createSong(ctx, master);
     }
 
     // Browsers start the context suspended until a user gesture resumes it.
@@ -83,8 +87,10 @@ export function initAudio() {
     on = true;
     master.gain.cancelScheduledValues(ctx.currentTime);
     master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), ctx.currentTime);
-    master.gain.exponentialRampToValueAtTime(0.5, ctx.currentTime + 0.6);
+    // Fades in over a couple of seconds rather than arriving abruptly.
+    master.gain.exponentialRampToValueAtTime(0.55, ctx.currentTime + 2);
 
+    song.start();
     scheduleBurst();
     return true;
   }
@@ -97,14 +103,19 @@ export function initAudio() {
     if (ctx && master) {
       master.gain.cancelScheduledValues(ctx.currentTime);
       master.gain.setValueAtTime(master.gain.value, ctx.currentTime);
-      master.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+      master.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
     }
+
+    // Let the fade finish before silencing the scheduler, so it does not cut off.
+    setTimeout(() => {
+      if (!on) song?.stop();
+    }, 900);
   }
 
   function setPressed(value) {
     button.setAttribute('aria-pressed', String(value));
-    button.dataset.tip = value ? 'Mute bird song' : 'Play bird song';
-    button.setAttribute('aria-label', value ? 'Mute bird song' : 'Play gentle bird song');
+    button.dataset.tip = value ? 'Mute music' : "Play Scoopy's song";
+    button.setAttribute('aria-label', value ? 'Mute music' : "Play Scoopy's song");
   }
 
   button.addEventListener('click', async () => {
@@ -123,13 +134,18 @@ export function initAudio() {
     }
   });
 
-  // Pause the chirping when the tab is not being looked at.
+  // Pause while the tab is in the background, and pick up again on return.
   document.addEventListener('visibilitychange', () => {
-    if (!on) return;
-    if (document.hidden) {
+    if (!ctx || !master) return;
+
+    if (document.hidden && on) {
+      master.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.15);
       clearTimeout(timer);
       timer = null;
-    } else {
+      song?.stop();
+    } else if (!document.hidden && on) {
+      master.gain.setTargetAtTime(0.55, ctx.currentTime, 0.4);
+      song?.start();
       scheduleBurst();
     }
   });
