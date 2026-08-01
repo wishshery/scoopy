@@ -33,8 +33,18 @@ const DATA_OUT = path.join(ROOT, 'src', 'data', 'media.generated.js');
 
 const SOURCE_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff']);
 
-/** Widths emitted for each photo. Larger widths are skipped if the source is smaller. */
-const WIDTHS = [480, 768, 1200, 1800, 2400];
+/**
+ * Widths emitted for each photo. Steps above what the source can supply are
+ * skipped — the pipeline never upscales, because interpolated pixels add file
+ * size without adding detail.
+ */
+const WIDTHS = [480, 768, 1200, 1800, 2400, 3200];
+
+/**
+ * Ceiling on emitted width. Serving above 4K wins nothing on any real display,
+ * and the encode cost climbs steeply past it.
+ */
+const MAX_WIDTH = 3840;
 
 /**
  * Derivative crops.
@@ -87,9 +97,12 @@ async function emitVariants(pipeline, meta, slug, cropId, ratio, position) {
      crop of a 1280x960 source, for example, tops out at 720px wide — asking for
      more would either enlarge the pixels or silently fall back to a different
      aspect ratio. */
-  const maxWidth = ratio ? Math.floor(Math.min(meta.width, meta.height * ratio)) : meta.width;
+  const sourceMax = ratio ? Math.floor(Math.min(meta.width, meta.height * ratio)) : meta.width;
+  const maxWidth = Math.min(sourceMax, MAX_WIDTH);
 
-  const usableWidths = WIDTHS.filter((w) => w < maxWidth).slice(-3);
+  /* The full ladder below the cap, not just the top few: a high-resolution
+     source still needs the small steps so phones are not handed a 4K file. */
+  const usableWidths = WIDTHS.filter((w) => w < maxWidth);
   usableWidths.push(maxWidth); // always emit the sharpest version this crop allows
 
   const sets = { avif: [], webp: [], jpg: [] };
