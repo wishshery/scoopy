@@ -5,7 +5,7 @@
  * rely on the light quiet zone around the code, and inverting it hurts read rates.
  */
 
-import { esc } from '../utils/dom.js';
+import { esc, asset } from '../utils/dom.js';
 import { icons } from '../utils/icons.js';
 import { social } from '../data/site.js';
 import { renderOrb } from './Decor.js';
@@ -55,7 +55,7 @@ export function renderFollow() {
           >
             <span class="qr__frame">
               <img
-                src="${esc(instagram.qr)}"
+                src="${esc(asset(instagram.qr))}"
                 width="720"
                 height="720"
                 alt="QR code linking to Scoopy's Instagram profile, ${esc(instagram.handle)}"

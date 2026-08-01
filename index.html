@@ -13,18 +13,28 @@
     <meta name="theme-color" content="#061417" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />
 
-    <!-- Social sharing -->
+    <!-- Social sharing. Open Graph requires absolute URLs, so these are the
+         deployed addresses rather than build-relative paths. -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Scoopy" />
+    <meta property="og:url" content="https://wishshery.github.io/scoopy/" />
     <meta property="og:title" content="Meet Scoopy — The tiny bird with the biggest personality" />
     <meta
       property="og:description"
       content="An interactive tribute to Scoopy the Sun Conure: endless curiosity, boundless energy, and a heart full of affection."
     />
-    <meta property="og:image" content="media/scoopy-bowtie-wide-1200.jpg" />
+    <meta
+      property="og:image"
+      content="https://wishshery.github.io/scoopy/media/scoopy-bowtie-wide-1200.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="675" />
+    <meta property="og:image:alt" content="Scoopy, a Sun Conure wearing a small red bow tie" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://wishshery.github.io/scoopy/" />
 
-    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="brand/instagram-qr.png" />
+    <!-- Root-absolute so Vite rewrites it with the deployment base path. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
     <!-- Fonts: preconnect early, then load without blocking first paint. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

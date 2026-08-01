@@ -25,6 +25,16 @@ export function esc(value) {
 /** Join template fragments, dropping null/undefined/false entries. */
 export const html = (parts) => parts.filter(Boolean).join('');
 
+/**
+ * Resolve a path from `public/` against the deployment base.
+ *
+ * Vite rewrites asset URLs it finds in HTML and CSS, but not paths built as
+ * strings at runtime. Without this, `media/photo.jpg` resolves relative to the
+ * current document — correct at `/scoopy/`, broken at `/scoopy` (no trailing
+ * slash) and on any nested route.
+ */
+export const asset = (path) => `${import.meta.env.BASE_URL}${String(path).replace(/^\/+/, '')}`;
+
 /** Clamp a number into a range. */
 export const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 

@@ -6,7 +6,17 @@
  * box. Intrinsic width/height are always emitted to prevent layout shift.
  */
 
-import { esc } from '../utils/dom.js';
+import { esc, asset } from '../utils/dom.js';
+
+/** Prefix every URL in a srcset with the deployment base path. */
+const resolveSrcset = (srcset) =>
+  srcset
+    .split(', ')
+    .map((entry) => {
+      const [url, descriptor] = entry.split(' ');
+      return `${asset(url)}${descriptor ? ` ${descriptor}` : ''}`;
+    })
+    .join(', ');
 
 /**
  * @param {object} photo   an entry from media.generated.js
@@ -38,11 +48,11 @@ export function renderMedia(photo, options = {}) {
   return `
     <div class="media ${esc(className)}" style="${box};background-image:url('${photo.lqip}')">
       <picture>
-        <source type="image/avif" srcset="${esc(variant.srcset.avif)}" sizes="${esc(sizes)}">
-        <source type="image/webp" srcset="${esc(variant.srcset.webp)}" sizes="${esc(sizes)}">
+        <source type="image/avif" srcset="${esc(resolveSrcset(variant.srcset.avif))}" sizes="${esc(sizes)}">
+        <source type="image/webp" srcset="${esc(resolveSrcset(variant.srcset.webp))}" sizes="${esc(sizes)}">
         <img
-          src="${esc(variant.src)}"
-          srcset="${esc(variant.srcset.jpg)}"
+          src="${esc(asset(variant.src))}"
+          srcset="${esc(resolveSrcset(variant.srcset.jpg))}"
           sizes="${esc(sizes)}"
           width="${variant.width}"
           height="${variant.height}"
