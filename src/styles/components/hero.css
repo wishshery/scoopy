@@ -31,7 +31,7 @@
 .hero__figure {
   position: absolute;
   /* Vertical overscan so the parallax shift never exposes the edge of the photo. */
-  inset: -18% 0;
+  inset: -12% 0;
   z-index: -2;
   overflow: hidden;
   /* Driven by the parallax module. */
@@ -48,12 +48,14 @@
   animation: hero-breathe 26s var(--ease-in-out) infinite alternate;
 }
 
+/* Kept deliberately small: the crop is already tight on narrow-but-not-mobile
+   viewports, and every extra percent of scale costs sharpness on a 1280px source. */
 @keyframes hero-breathe {
   from {
-    transform: scale(1.06);
+    transform: scale(1);
   }
   to {
-    transform: scale(1.14);
+    transform: scale(1.055);
   }
 }
 
