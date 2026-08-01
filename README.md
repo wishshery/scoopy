@@ -147,6 +147,22 @@ no bandwidth, never repeats identically, and raises no licensing question.
 
 ## Deployment
 
-GitHub Pages, via `.github/workflows/deploy.yml`. Every push to `main` builds the site
-and publishes `dist/`. `BASE_PATH` is set from the repository name so asset URLs resolve
-under the project path.
+Live at **https://scoopsforoops.com** — GitHub Pages, via `.github/workflows/deploy.yml`.
+Every push to `main` builds the site and publishes `dist/`.
+
+The custom domain is declared in `public/CNAME`, and the workflow builds with
+`BASE_PATH=/` because a custom domain serves from the domain root. If you ever remove
+`public/CNAME`, change `BASE_PATH` back to `/${{ github.event.repository.name }}/` so
+assets resolve under the `/scoopy/` project path again.
+
+### DNS (at GoDaddy)
+
+| Type  | Name | Value                                                     |
+| ----- | ---- | --------------------------------------------------------- |
+| A     | `@`  | `185.199.108.153` `.109.153` `.110.153` `.111.153`         |
+| CNAME | `www`| `wishshery.github.io`                                      |
+
+Those four A records are GitHub Pages' anycast addresses. After changing DNS, GitHub
+provisions a Let's Encrypt certificate automatically; that usually lands within an hour.
+Once it does, turn on **Enforce HTTPS** in Settings → Pages (or
+`gh api -X PUT repos/wishshery/scoopy/pages -F https_enforced=true`).
