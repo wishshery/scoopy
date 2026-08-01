@@ -28,8 +28,8 @@ export function renderQrCard({ className = '', eager = false, extraAttrs = '' } 
         <span class="qr__frame">
           <img
             src="${esc(asset(instagram.qr))}"
-            width="720"
-            height="720"
+            width="1440"
+            height="1440"
             alt="QR code linking to Scoopy's Instagram profile, ${esc(instagram.handle)}"
             loading="${eager ? 'eager' : 'lazy'}"
             decoding="async"

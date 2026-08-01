@@ -161,6 +161,23 @@ every later visit. To ship the site muted by default instead, change the final l
 `initAudio()` in `src/effects/audio.js` to arm only when the stored preference is
 explicitly `'on'`.
 
+### The QR code
+
+`public/brand/instagram-qr.png` is **generated**, not committed as a fixed asset —
+`npm run qr` builds it from the Instagram URL in `src/data/site.js`, so the code can
+never drift from the link.
+
+This replaced the code Instagram hands you in the app, which is a stylised graphic
+rather than a spec-compliant QR: it would not decode at any size, under any contrast
+or threshold treatment, which is why phone cameras could not read it. Instagram's own
+scanner is the only thing that reliably reads those.
+
+The generated one is a real QR at error-correction level H, in deep teal on white,
+with the Instagram glyph composited into the middle. The script decodes its own output
+before writing it — at every size the page renders the code, and through the card's
+animated scan-line tint — and falls back to a plain code without the glyph if that ever
+stops reading. A change that breaks scanning fails the build instead of shipping.
+
 ### Visitor counter
 
 The footer count comes from [Abacus](https://abacus.jasoncameron.dev), a small

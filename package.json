@@ -6,11 +6,15 @@
   "type": "module",
   "scripts": {
     "images": "node scripts/process-images.mjs",
-    "dev": "npm run images && vite",
-    "build": "npm run images && vite build",
+    "qr": "node scripts/make-qr.mjs",
+    "assets": "npm run images && npm run qr",
+    "dev": "npm run assets && vite",
+    "build": "npm run assets && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "jsqr": "^1.4.0",
+    "qrcode": "^1.5.4",
     "sharp": "^0.34.2",
     "vite": "^7.0.0"
   }
