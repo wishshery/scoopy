@@ -17,6 +17,10 @@
   transform: translateY(-140%);
 }
 
+/* The bar always carries its glass plate. It sits over the hero photograph,
+   whose upper right is bright cream — link text on bare photo does not hold
+   contrast there in either theme. Scrolling tightens and lifts it rather than
+   introducing the background. */
 .nav {
   display: flex;
   align-items: center;
@@ -24,23 +28,21 @@
   width: var(--shell);
   padding: 0.5rem 0.6rem 0.5rem 1.1rem;
   border-radius: var(--radius-pill);
-  background: transparent;
-  border: 1px solid transparent;
-  box-shadow: none;
+  background: color-mix(in srgb, var(--surface) 76%, transparent);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
   transition: background var(--dur-mid) var(--ease-out), border-color var(--dur-mid) var(--ease-out),
     box-shadow var(--dur-mid) var(--ease-out), width var(--dur-mid) var(--ease-out);
 }
 
-/* Only becomes a glass pill once the page has scrolled past the hero lip. */
 .site-header.is-stuck .nav {
   width: min(100% - 2.5rem, 1120px);
-  background: var(--glass-bg);
-  border-color: var(--glass-border);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
   box-shadow: var(--shadow-md);
 }
 
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .site-header.is-stuck .nav {
+  .nav {
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
     backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
   }

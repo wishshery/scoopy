@@ -6,9 +6,9 @@
  * never looks looped.
  */
 
-import { $$, esc, html, rand, randInt } from '../utils/dom.js';
+import { $$, esc, html, rand, randInt, asset } from '../utils/dom.js';
 import { icons } from '../utils/icons.js';
-import { meta } from '../data/site.js';
+import { meta, social } from '../data/site.js';
 import { renderMedia } from './Media.js';
 import { prefersReducedMotion } from '../utils/motion.js';
 
@@ -40,7 +40,7 @@ function renderClouds(count = 4) {
  */
 export function renderHero(heroPhoto) {
   return `
-    <section class="hero" id="top" data-parallax="0.22">
+    <section class="hero" id="top" data-parallax="0.1">
       <div class="hero__sky" aria-hidden="true"></div>
       <div class="hero__clouds" aria-hidden="true">${renderClouds()}</div>
 
@@ -62,6 +62,34 @@ export function renderHero(heroPhoto) {
             : ''
         }
       </div>
+
+      <!-- Compact scan target so visitors can follow without scrolling. The full
+           QR card in the Follow section stays as the primary, larger one. -->
+      <a
+        class="hero__qr"
+        href="${esc(social.instagram.url)}"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-hero-el
+        style="--reveal-delay:760ms"
+        aria-label="Scan or tap to open ${esc(social.instagram.handle)} on Instagram (opens in a new tab)"
+      >
+        <span class="hero__qr-code">
+          <img
+            src="${esc(asset(social.instagram.qr))}"
+            width="720"
+            height="720"
+            alt=""
+            loading="eager"
+            decoding="async"
+          >
+          <span class="hero__qr-scan" aria-hidden="true"></span>
+        </span>
+        <span class="hero__qr-text">
+          <b>Scan to follow</b>
+          <span>${esc(social.instagram.handle)}</span>
+        </span>
+      </a>
 
       <div class="hero__inner">
         <p class="hero__badge" data-hero-el style="--reveal-delay:120ms">
