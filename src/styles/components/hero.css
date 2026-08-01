@@ -228,14 +228,17 @@
 .hero .qr--hero {
   position: absolute;
   top: calc(var(--header-h) + 1.6rem);
-  right: max(1.5rem, calc((100% - var(--shell)) / 2));
+  /* Hugs the right edge rather than the content shell. Scoopy sits near the
+     horizontal centre of the frame, so the outer margin is the plain wall in
+     the photograph — the card clears him there. */
+  right: 1.75rem;
   z-index: 3;
   margin: 0;
 }
 
-/* There is no room for a 380px card beside the headline below this width; the
-   Follow section carries the code there instead. */
-@media (max-width: 1180px) {
+/* Below this width the right margin is no longer clear of Scoopy, and a 380px
+   card starts crowding the headline. The Follow section carries the code there. */
+@media (max-width: 1400px) {
   .hero .qr--hero {
     display: none;
   }

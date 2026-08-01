@@ -28,12 +28,13 @@ jobs:
 
       - run: npm ci
 
-      # BASE_PATH makes asset URLs resolve under the project path
-      # (https://<user>.github.io/<repo>/) rather than the domain root.
+      # The site is served from the custom domain in public/CNAME, which is a
+      # domain root — so assets resolve from "/", not the project path. Remove
+      # public/CNAME and this becomes /<repo>/ again.
       - name: Build
         run: npm run build
         env:
-          BASE_PATH: /${{ github.event.repository.name }}/
+          BASE_PATH: /
 
       - uses: actions/configure-pages@v5
 
