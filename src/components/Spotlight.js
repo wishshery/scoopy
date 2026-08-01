@@ -26,6 +26,9 @@ export function renderSpotlight(photos) {
   const photo = pickPhotoOfTheDay(photos);
   if (!photo) return '';
 
+  // The visible prose is `story`, never `alt` — alt text is written for screen
+  // readers and reads like metadata when shown as copy on the page.
+
   const today = new Date().toLocaleDateString(undefined, {
     weekday: 'long',
     day: 'numeric',
@@ -49,9 +52,9 @@ export function renderSpotlight(photos) {
           <div class="spotlight__copy">
             <p class="spotlight__ribbon">${icons.star}<span>Photo of the day</span></p>
             <h2 id="spotlight-title" class="spotlight__title">
-              ${esc(photo.caption || 'Today&rsquo;s Scoopy')}
+              ${esc(photo.caption) || 'Today&rsquo;s Scoopy'}
             </h2>
-            <p class="spotlight__text">${esc(photo.alt)}</p>
+            ${photo.story ? `<p class="spotlight__text">${esc(photo.story)}</p>` : ''}
             <p class="spotlight__date">${esc(today)}</p>
           </div>
         </div>

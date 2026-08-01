@@ -82,8 +82,8 @@ export function renderGallery(photos) {
         <p class="gallery__note" data-reveal>
           ${
             photos.length === 1
-              ? 'One photograph, framed four ways &mdash; drop more images into <code>src/assets/photos/</code> and they join the gallery automatically.'
-              : `${photos.length} photographs and counting.`
+              ? 'One portrait, four ways of looking at him.'
+              : `${photos.length} photographs, and counting.`
           }
         </p>
       </div>

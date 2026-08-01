@@ -52,10 +52,6 @@ export function renderMemoryWall(photos) {
             })
           )}
         </ol>
-
-        <p class="memories__note" data-reveal>
-          New memories go at the top of the <code>memories</code> list in <code>src/data/site.js</code>.
-        </p>
       </div>
     </section>`;
 }

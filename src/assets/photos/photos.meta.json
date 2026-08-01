@@ -1,9 +1,10 @@
 {
-  "_readme": "Optional descriptions for the photos in this folder. Keys are filenames. Every field is optional — anything you leave out gets a sensible default. Set \"feature\": true on the photo you want used as the hero and Photo of the Day.",
+  "_readme": "Optional descriptions for the photos in this folder. Keys are filenames. Every field is optional — anything you leave out gets a sensible default. \"alt\" is for screen readers; \"caption\" is the short line on gallery tiles; \"story\" is the sentence or two shown under Photo of the Day. Set \"feature\": true on the photo you want used as the hero.",
 
   "scoopy-bowtie.jpg": {
     "alt": "Scoopy, a Sun Conure with a golden-orange head and emerald wing tips, wearing a small red bow tie and tilting his head at the camera",
     "caption": "Dressed for the occasion. No occasion.",
+    "story": "He has decided the bow tie suits him, and on this point he will not be taking questions.",
     "date": "2026-08-01",
     "tags": ["portrait", "bow tie", "handsome"],
     "feature": true

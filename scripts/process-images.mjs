@@ -180,6 +180,10 @@ async function run() {
       id: slug,
       alt: declared.alt || `Scoopy the Sun Conure — ${titleCase(slug)}`,
       caption: declared.caption || '',
+      // Prose shown under the Photo of the Day heading. Kept separate from
+      // `alt`, which is written for screen readers and reads like metadata if
+      // it is put on the page as visible copy.
+      story: declared.story || '',
       date: declared.date || '',
       tags: declared.tags || [],
       feature: declared.feature === true,
