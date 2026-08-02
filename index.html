@@ -52,6 +52,18 @@
       />
     </noscript>
 
+    <!-- Google Analytics (GA4) — property "Scoopy — scoopsforoops.com".
+         Loaded async so it never blocks first paint. -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6H98QPSD25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-6H98QPSD25');
+    </script>
+
     <script>
       /* Apply the saved theme before first paint so there is no flash of the
          wrong colour scheme. Kept inline and tiny on purpose. */
